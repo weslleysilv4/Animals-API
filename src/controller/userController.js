@@ -41,11 +41,19 @@ const userController = {
 
   async update(req, res) {
     const { id } = req.params;
-    const { username, password, role } = req.body;
+    const { username, password, isAdmin } = req.body;
     const user = await UserModel.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ error: "Campos obrigatórios não preenchidos" });
+    }
     user.username = username;
     user.password = password;
-    user.role = role;
+    user.isAdmin = isAdmin;
     await user.save();
     res.json(user);
   },
