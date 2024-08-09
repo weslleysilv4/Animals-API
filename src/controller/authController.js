@@ -14,10 +14,7 @@ const authController = {
 
     const token = jwt.sign(
       { id: user.id, isAdmin: user.isAdmin },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
+      process.env.JWT_SECRET
     );
     return res.json({ logged: true, token: token });
   },

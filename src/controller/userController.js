@@ -1,5 +1,4 @@
 const UserModel = require("../models/User");
-const bcrypt = require("bcrypt");
 
 const userController = {
   async list(req, res) {
@@ -12,12 +11,10 @@ const userController = {
     if (userExists) {
       return res.status(400).json({ error: "User already exists" });
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
     try {
       const user = await UserModel.create({
         username,
-        password: hashedPassword,
+        password,
       });
       res.status(201).json({ msg: "Usuário Criado com Sucesso!", user: user });
     } catch (error) {
@@ -30,12 +27,10 @@ const userController = {
     if (userExists) {
       return res.status(400).json({ error: "User already exists" });
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
     try {
       const user = await UserModel.create({
         username,
-        password: hashedPassword,
+        password,
         isAdmin: true,
       });
       res.status(201).json({ msg: "Admin Criado com Sucesso!", user: user });
@@ -43,6 +38,7 @@ const userController = {
       res.status(400).json({ error: error.message });
     }
   },
+
   async update(req, res) {
     const { id } = req.params;
     const { username, password, role } = req.body;
