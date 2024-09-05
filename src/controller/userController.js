@@ -37,8 +37,13 @@ const userController = {
     const { id } = req.params;
     const { username, password, isAdmin } = req.body;
     try {
-      const user = await userService.update(id, username, password, isAdmin);
-      res.status(200).json({ message: "User updated successfully", user });
+      if (req.user.isAdmin === false) {
+        const user = await userService.update(id, username, password);
+        res.status(200).json({ message: "User updated successfully", user });
+      } else {
+        const user = await userService.update(id, username, password, isAdmin);
+        res.status(200).json({ message: "User updated successfully", user });
+      }
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

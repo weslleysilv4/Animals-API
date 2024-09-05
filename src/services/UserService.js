@@ -45,7 +45,7 @@ const UserService = {
     });
   },
 
-  async update(id, username, password) {
+  async update(id, username, password, isAdmin) {
     const user = await UserModel.findByPk(id);
     if (!user) {
       throw new Error("User not found");
@@ -58,6 +58,9 @@ const UserService = {
     if (password) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
+    }
+    if (isAdmin) {
+      user.isAdmin = isAdmin;
     }
 
     await user.save();
