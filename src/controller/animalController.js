@@ -19,9 +19,6 @@ const AnimalController = {
   async getAll(req, res) {
     try {
       const { page = 1, limit = 5 } = req.query;
-      if (limit !== 5 && limit !== 10 && limit !== 30) {
-        return res.status(400).json({ error: "Invalid limit value" });
-      }
       const animals = await AnimalService.getAll(Number(page), Number(limit));
       return res.status(200).json({
         totalAnimals: animals.count,
