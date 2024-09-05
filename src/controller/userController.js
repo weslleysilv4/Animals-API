@@ -4,7 +4,10 @@ const userController = {
   async getAll(req, res) {
     try {
       const users = await userService.getAll();
-      res.status(200).json(users);
+      res.status(200).json({
+        totalUsers: users.length,
+        data: users,
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

@@ -8,6 +8,12 @@ const UserService = {
     });
   },
 
+  async getById(id) {
+    return await UserModel.findByPk(id, {
+      attributes: { exclude: ["password"] },
+    });
+  },
+
   async create(username, password) {
     const userExists = await UserModel.findOne({ where: { username } });
     if (userExists) {

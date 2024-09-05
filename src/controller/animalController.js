@@ -1,9 +1,14 @@
 const AnimalService = require("../services/AnimalService");
+const UserService = require("../services/UserService");
 
 const AnimalController = {
   async create(req, res) {
     try {
       const { name, type, breed, userId } = req.body;
+      const user = await UserService.getById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
       const animal = await AnimalService.create(name, type, breed, userId);
       return res.status(201).json(animal);
     } catch (error) {
@@ -14,6 +19,9 @@ const AnimalController = {
   async getAll(req, res) {
     try {
       const { page = 1, limit = 5 } = req.query;
+      if (limit !== 5 && limit !== 10 && limit !== 30) {
+        return res.status(400).json({ error: "Invalid limit value" });
+      }
       const animals = await AnimalService.getAll(Number(page), Number(limit));
       return res.status(200).json({
         totalAnimals: animals.count,

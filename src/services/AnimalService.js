@@ -7,8 +7,8 @@ const AnimalService = {
   },
 
   async getAll(skip, limit) {
-    const limitesPermitidos = [5, 10, 30];
-    if (!limitesPermitidos.includes(limit)) {
+    const limitAllowed = [5, 10, 30];
+    if (!limitAllowed.includes(limit)) {
       limit = 5;
     }
     const offset = (skip - 1) * limit;
