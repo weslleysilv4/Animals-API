@@ -58,8 +58,18 @@ const AnimalController = {
   async update(req, res) {
     try {
       const { id } = req.params;
+      const isAdmin = req.user.isAdmin;
+      const userId = req.user.id;
+
       const { name, type, breed } = req.body;
-      const updatedAnimal = await AnimalService.update(id, name, type, breed);
+      const updatedAnimal = await AnimalService.update(
+        id,
+        name,
+        type,
+        breed,
+        userId,
+        isAdmin
+      );
       return res.status(200).json(updatedAnimal);
     } catch (error) {
       return res.status(400).json({ error: error.message });

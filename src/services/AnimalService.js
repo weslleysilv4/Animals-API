@@ -34,10 +34,17 @@ const AnimalService = {
     });
   },
 
-  async update(id, name, type, breed) {
+  async update(id, name, type, breed, userId, isAdmin) {
     const animal = await AnimalModel.findByPk(id);
     if (!animal) {
       throw new Error("Animal not found");
+    }
+    if (isAdmin === true) {
+      return await animal.update({ name, type, breed, userId });
+    } else if (userId === animal.userId) {
+      return await animal.update({ name, type, breed });
+    } else if (userId !== animal.userId) {
+      throw new Error("You do not have permission to update this animal");
     }
     return await animal.update({ name, type, breed });
   },
