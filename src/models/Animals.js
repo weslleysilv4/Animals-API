@@ -1,25 +1,25 @@
-const { Model, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 const User = require("./User");
 
-class Animals extends Model {}
-
-Animals.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    name: DataTypes.STRING,
-    type: DataTypes.STRING,
-    breed: DataTypes.STRING,
-    location: DataTypes.STRING,
-    latitude: DataTypes.FLOAT,
-    longitude: DataTypes.FLOAT,
+const AnimalModel = sequelize.define("animal", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
   },
-  Animals.belongsTo(User, { foreignKey: "id" }),
-  { sequelize, modelName: "animals" }
-);
+  name: { type: DataTypes.STRING, allowNull: false },
+  type: { type: DataTypes.STRING, allowNull: false },
+  breed: { type: DataTypes.STRING, allowNull: false },
+});
 
-module.exports = Animals;
+AnimalModel.belongsTo(User, {
+  constraints: true,
+  foreignKey: {
+    name: "userId",
+    allowNull: false,
+  },
+  onDelete: "CASCADE",
+});
+
+module.exports = AnimalModel;

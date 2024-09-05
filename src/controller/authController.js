@@ -9,7 +9,7 @@ const authController = {
     const user = await User.findOne({ where: { username } });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: "Credenciais inválidas" });
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
 
     const token = jwt.sign(
@@ -21,17 +21,17 @@ const authController = {
   authenticateToken(req, res, next) {
     const token = req.header("Authorization")?.split(" ")[1];
 
-    if (!token) return res.status(401).json({ message: "Token não fornecido" });
+    if (!token) return res.status(401).json({ message: "Token not provided" });
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) return res.status(403).json({ message: "Token inválido" });
+      if (err) return res.status(403).json({ message: "Invalid Token" });
       req.user = user;
       next();
     });
   },
   authorizeAdmin(req, res, next) {
     if (!req.user.isAdmin) {
-      return res.status(403).json({ message: "Acesso negado" });
+      return res.status(403).json({ message: "Access Denied!" });
     }
     next();
   },

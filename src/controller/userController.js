@@ -1,39 +1,30 @@
-const UserModel = require("../models/User");
+const userService = require("../services/UserService");
 
 const userController = {
-  async list(req, res) {
-    const users = await UserModel.findAll();
-    res.status(200).json(users);
+  async getAll(req, res) {
+    try {
+      const users = await userService.getAll();
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   },
+
   async create(req, res) {
     const { username, password } = req.body;
-    const userExists = await UserModel.findOne({ where: { username } });
-    if (userExists) {
-      return res.status(400).json({ error: "User already exists" });
-    }
     try {
-      const user = await UserModel.create({
-        username,
-        password,
-      });
-      res.status(201).json({ msg: "Usuário Criado com Sucesso!", user: user });
+      const user = await userService.create(username, password);
+      res.status(201).json({ message: "User created successfully", user });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   },
+
   async createAdmin(req, res) {
     const { username, password } = req.body;
-    const userExists = await UserModel.findOne({ where: { username } });
-    if (userExists) {
-      return res.status(400).json({ error: "User already exists" });
-    }
     try {
-      const user = await UserModel.create({
-        username,
-        password,
-        isAdmin: true,
-      });
-      res.status(201).json({ msg: "Admin Criado com Sucesso!", user: user });
+      const user = await userService.createAdmin(username, password);
+      res.status(201).json({ message: "Admin created successfully", user });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
@@ -42,34 +33,22 @@ const userController = {
   async update(req, res) {
     const { id } = req.params;
     const { username, password, isAdmin } = req.body;
-    const user = await UserModel.findByPk(id);
-    if (!user) {
-      return res.status(404).json({ error: "Usuário não encontrado" });
+    try {
+      const user = await userService.update(id, username, password, isAdmin);
+      res.status(200).json({ message: "User updated successfully", user });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
-    if (!username || !password) {
-      return res
-        .status(400)
-        .json({ error: "Campos obrigatórios não preenchidos" });
-    }
-    user.username = username;
-    user.password = password;
-    user.isAdmin = isAdmin;
-    await user.save();
-    res.json(user);
   },
+
   async delete(req, res) {
     const { id } = req.params;
-    const user = await UserModel.findByPk(id);
-    if (!user) {
-      return res.status(404).json({ error: "Usuário não encontrado" });
+    try {
+      await userService.delete(id);
+      res.status(204).json({ message: "User deleted successfully" });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
-    if (user.isAdmin) {
-      return res
-        .status(403)
-        .json({ error: "Não é possível deletar um administrador'" });
-    }
-    await user.destroy();
-    res.status(204).json({ msg: "Usuário Deletado com sucesso!" });
   },
 };
 
