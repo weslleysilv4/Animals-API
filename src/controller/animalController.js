@@ -55,6 +55,20 @@ const AnimalController = {
     }
   },
 
+  async getAnimalByToken(req, res) {
+    const { id } = req.user;
+    if (!id) {
+      return res.status(400).json({ error: "Invalid token or user ID" });
+    }
+
+    try {
+      const animals = await AnimalService.getAnimalByUserId(id);
+      return res.status(200).json(animals);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  },
+
   async update(req, res) {
     try {
       const { id } = req.params;

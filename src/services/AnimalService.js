@@ -16,6 +16,7 @@ const AnimalService = {
     return await AnimalModel.findAndCountAll({
       limit,
       offset,
+      include: { model: UserModel, attributes: ["username"] },
     });
   },
 
@@ -25,13 +26,18 @@ const AnimalService = {
 
   async getAnimalByUserId(userId) {
     const user = await UserModel.findByPk(userId);
+
     if (!user) {
       throw new Error("User not found");
     }
-    return await AnimalModel.findAll({
+    const animal = await AnimalModel.findAll({
       where: { userId: userId },
-      association: "user",
+      include: { model: UserModel, attributes: ["username"] },
     });
+    if (!animal) {
+      throw new Error("Animal not found");
+    }
+    return { "My Animals": animal };
   },
 
   async update(id, name, type, breed, userId, isAdmin) {

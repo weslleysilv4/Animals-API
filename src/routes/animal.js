@@ -11,7 +11,7 @@ router.post("/animals", authenticateToken, async (req, res) => {
   //   description: 'Animal data',
   //   required: true,
   //   type: 'object',
-  //   schema: { $ref: '#/definitions/NewAnimal' }
+  //   schema: { $ref: '#/definitions/Animal' }
   // }
   // #swagger.responses[201] = {
   //   description: 'Animal created'
@@ -57,6 +57,19 @@ router.get("/animals/user/:id", async (req, res) => {
   // }
 });
 
+router.get("/animal/token", authenticateToken, async (req, res) => {
+  return AnimalController.getAnimalByToken(req, res);
+  // #swagger.tags = ['Animals']
+  // #swagger.description = 'Endpoint to get an animal by token'
+  // #swagger.responses[200] = {
+  //   description: 'Animal found',
+  //   schema: { $ref: '#/definitions/Animal' }
+  // }
+  // #swagger.responses[400] = {
+  //   description: 'Error searching for animal'
+  // }
+});
+
 router.put("/animals/:id", authenticateToken, async (req, res) => {
   return AnimalController.update(req, res);
   // #swagger.tags = ['Animals']
@@ -66,7 +79,7 @@ router.put("/animals/:id", authenticateToken, async (req, res) => {
   //   description: 'Animal data',
   //   required: true,
   //   type: 'object',
-  //   schema: { $ref: '#/definitions/NewAnimal' }
+  //   schema: { $ref: '#/definitions/Animal' }
   // }
   // #swagger.responses[200] = {
   //   description: 'Animal updated'
