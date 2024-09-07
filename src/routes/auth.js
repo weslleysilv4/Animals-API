@@ -33,12 +33,12 @@ router.post(
   }
   // #swagger.tags = ['Admin']
   // #swagger.description = 'Endpoint to create an admin'
-  // #swagger.parameters['newUser'] = {
+  // #swagger.parameters['User'] = {
   //   in: 'body',
   //   description: 'User data',
   //   required: true,
   //   type: 'object',
-  //   schema: { $ref: '#/definitions/NewUser' }
+  //   schema: { $ref: '#/definitions/User' }
   // }
   // #swagger.responses[201] = {
   //   description: 'Admin created'

@@ -55,6 +55,16 @@ const AnimalController = {
     }
   },
 
+  async getAnimalByBreed(req, res){
+    const { breed } = req.params
+    try{
+      const animal = await AnimalService.getAnimalByBreed(breed);
+      return res.status(200).json(animal);
+    }catch(error){
+      return res.status(400).json({error: error.message})
+    }
+  },
+
   async getAnimalByToken(req, res) {
     const { id } = req.user;
     if (!id) {

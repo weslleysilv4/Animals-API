@@ -70,6 +70,18 @@ router.get("/animal/token", authenticateToken, async (req, res) => {
   // }
 });
 
+router.get("/animals/breed/:breed", authenticateToken, async (req, res) => {
+  return AnimalController.getAnimalByBreed(req, res);
+  // #swagger.tags = ['Animals']
+  // #swagger.description = 'Endpoint to get an animal by breed'
+  // #swagger.responses[200] = {
+  //   description: 'Animal found'
+  // }
+  // #swagger.responses[400] = {
+  //   description: 'Error searching for animal'
+  // }
+});
+
 router.put("/animals/:id", authenticateToken, async (req, res) => {
   return AnimalController.update(req, res);
   // #swagger.tags = ['Animals']

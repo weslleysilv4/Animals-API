@@ -40,6 +40,17 @@ const AnimalService = {
     return { "My Animals": animal };
   },
 
+  async getAnimalByBreed(breed){
+    const animal = await AnimalModel.findAll({
+      where: {breed: breed},
+      include: {model: UserModel, attributes: ["username"]}
+    })
+    if (!animal) {
+      throw new Error("Animal not found");
+    }
+    return { "Animals by Breed": animal };
+  },
+
   async update(id, name, type, breed, userId, isAdmin) {
     const animal = await AnimalModel.findByPk(id);
     if (!animal) {

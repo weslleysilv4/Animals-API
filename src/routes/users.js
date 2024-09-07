@@ -23,12 +23,12 @@ router.post("/register", async (req, res) => {
   return userController.create(req, res);
   // #swagger.tags = ['Users']
   // #swagger.description = 'Endpoint to create a new user'
-  // #swagger.parameters['newUser'] = {
+  // #swagger.parameters['User'] = {
   //   in: 'body',
   //   description: 'User data',
   //   required: true,
   //   type: 'object',
-  //   schema: { $ref: '#/definitions/NewUser' }
+  //   schema: { $ref: '#/definitions/User' }
   // }
   // #swagger.responses[201] = {
   //   description: 'User created'
@@ -47,7 +47,7 @@ router.put("/update/:id", authenticateToken, async (req, res) => {
   //   description: 'User data',
   //   required: true,
   //   type: 'object',
-  //   schema: { $ref: '#/definitions/NewUser' }
+  //   schema: { $ref: '#/definitions/User' }
   // }
 });
 
